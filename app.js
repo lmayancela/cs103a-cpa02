@@ -21,6 +21,7 @@ const axios = require("axios")
 const Course = require('./models/Course')
 const Schedule = require('./models/Schedule')
 const Collection = require('./models/Collection')
+const Gif = require('./models/Gif')
 
 // *********************************************************** //
 //  Loading JSON datasets
@@ -135,15 +136,38 @@ function trimData(gif) {
   return trimmedGif;
 }
 
+// Will attempt to store each gif in the database if it doesn't already exist
+async function storeGifs(gifs) {
+  for (const gif of gifs) {
+    const title = gif.title
+    const url = gif.url
+    const mp4 = gif.mp4
+    try{
+      const lookup = await Gif.find({title, url, mp4})
+      if (lookup.length==0){
+        const new_gif = new Gif({title, url, mp4})
+        await new_gif.save()
+        console.log(gif)
+      }
+    } catch(e){
+      next(e)
+    } 
+  }
+}
+
 // Makes a request to the giphy API using axios. 
-// The request URL is built here using the previously defined url and given parameters
 app.post("/gifs/search", (req, res, next) =>{
   const {q,rating} = req.body;
-  request_url = url + "&q=" + q + "&limit=50&offset=0&rating=" + rating +"&lang=en";
+
+  // The request URL is built here using the previously defined url and given parameters
+  const request_url = url + "&q=" + q + "&limit=50&offset=0&rating=" + rating +"&lang=en";
 
   axios.get(request_url).then(response => {
     gifs = response.data.data;
-    gifs.map(gif => trimData(gif));
+
+    // Clean the data to extract relevant fields then save to DB if not already saved
+    gifs = gifs.map(gif => trimData(gif));
+    storeGifs(gifs);
     res.locals.query = q;
     res.locals.gifs = gifs;
     res.render("giflist");
@@ -200,8 +224,6 @@ function time2str(time){
 
   return `${meetingType}: ${days.join(",")}: ${min2HourMin(start)}-${min2HourMin(end)} ${location}`
 }
-
-
 
 /* ************************
   Loading (or reloading) the data into a collection
