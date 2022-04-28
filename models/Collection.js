@@ -5,7 +5,7 @@ const ObjectId = Schema.Types.ObjectId;
 
 var collectionSchema = Schema({
     userId:ObjectId,
-    gifLink:String,
+    gifId:ObjectId,
 });
 
 module.exports = mongoose.model( 'Collection', collectionSchema );

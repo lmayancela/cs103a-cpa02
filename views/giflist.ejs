@@ -1,0 +1,27 @@
+<h1>Gif Results for Search Term: <%= query %></h1>
+<hr>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>URL</th>
+            <th>mp4</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% for (gif of gifs) { 
+            const url = gif.url
+            const mp4 = gif.mp4 %>
+        <tr class="mb-2"> 
+            <td><strong> <%= gif.title %> </strong></td>
+            <td>
+                <a href=<%= url %>> <%= url %> </a>
+            </td>
+
+            <td>
+                <a href=<%= mp4 %>> <%= mp4 %> </a>
+            </td>
+        </tr>
+        <% } %>
+    </tbody>
+</table>
