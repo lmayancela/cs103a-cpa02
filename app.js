@@ -27,7 +27,7 @@ const Gif = require('./models/Gif')
 
 const mongoose = require( 'mongoose' );
 //const mongodb_URI = 'mongodb://localhost:27017/cs103a_todo'
-const mongodb_URI = process.env.DATABSE_URL;
+const mongodb_URI = process.env.DATABASE_URL;
 
 mongoose.connect( mongodb_URI, { useNewUrlParser: true, useUnifiedTopology: true } );
 // fix deprecation warnings
