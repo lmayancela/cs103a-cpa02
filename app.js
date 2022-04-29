@@ -46,7 +46,7 @@ const api_key = process.env.API_KEY;
 const url = "https://api.giphy.com/v1/gifs/search?api_key=" + api_key
 
 console.log("APIKEY: "+ api_key)
-
+console.log("URL: " + mongodb_URI)
 
 // *********************************************************** //
 // Initializing the Express server 
