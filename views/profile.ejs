@@ -14,4 +14,29 @@
     <input type="submit">
 </form>
 
+
 <h1><%= username %>'s Gifs</h1>
+<% if (gifs.length == 0) {%>
+    <p>No gifs have been saved yet</p>
+<% } else { %>
+    <div class="d-flex flex-wrap justify-content-center">
+        <% for (gif of gifs) {
+            const url = gif.url
+            const mp4 = gif.mp4
+            const slug = gif.slug %>
+            <div>
+                <div class="p-2 border border-primary bg-light">
+                    <strong> <%= gif.title %> </strong> <br>
+                    <video autoplay="autoplay" loop="loop" width="400" height="300"> 
+                        <source src= "<%= mp4 %>" type="video/mp4" /> 
+                        <img src="<%= url %>" width="400" height="300" /> 
+                    </video> 
+                    <br>
+                    <div class="border border-warning bg-light text-center">
+                        <a href="/collection/delete/<%= slug %>">Delete from Collection</a>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+<% } %>
