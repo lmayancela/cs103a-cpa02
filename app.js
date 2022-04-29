@@ -27,9 +27,7 @@ const Gif = require('./models/Gif')
 
 const mongoose = require( 'mongoose' );
 //const mongodb_URI = 'mongodb://localhost:27017/cs103a_todo'
-const mongodb_URI = "mongodb+srv://lmayancela:ROnMIKzYRakXDq2S@cpa02.blvhi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-//mongodb+srv://cs103a:<password>@cluster0.kgugl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-//"mongodb+srv://lmayancela:ROnMIKzYRakXDq2S@cpa02.blvhi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const mongodb_URI = process.env.DATABSE_URL;
 
 mongoose.connect( mongodb_URI, { useNewUrlParser: true, useUnifiedTopology: true } );
 // fix deprecation warnings
@@ -44,8 +42,7 @@ db.once('open', function() {console.log("we are connected!!!")});
 //  Defining urls and api keys for the Giphy API
 // *********************************************************** //
 
-// const api_key = process.env.GIPHY_API_KEY
-const api_key = "X3nxNLws75d2nnyTJPE7ARJsz5tSNDbw"
+const api_key = process.env.API_KEY;
 const url = "https://api.giphy.com/v1/gifs/search?api_key=" + api_key
 
 console.log("APIKEY: "+ api_key)
