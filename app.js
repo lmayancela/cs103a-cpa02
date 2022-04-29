@@ -230,81 +230,8 @@ app.get('/collection/delete/:gifURL',
     } catch(e) {
       next(e)
     }
-    
 });
 
-
-/* ************************
-  Loading (or reloading) the data into a collection
-   ************************ */
-// this route loads in the courses into the Course collection
-// or updates the courses if it is not a new collection
-
-app.get('/upsertDB',
-  async (req,res,next) => {
-    //await Course.deleteMany({})
-    for (course of courses){
-      const {subject,coursenum,section,term}=course;
-      const num = getNum(coursenum);
-      course.num=num
-      course.suffix = coursenum.slice(num.length)
-      await Course.findOneAndUpdate({subject,coursenum,section,term},course,{upsert:true})
-    }
-    const num = await Course.find({}).count();
-    res.send("data uploaded: "+num)
-  }
-)
-
-app.use(isLoggedIn)
-
-app.get('/addCourse/:courseId',
-  // add a course to the user's schedule
-  async (req,res,next) => {
-    try {
-      const courseId = req.params.courseId
-      const userId = res.locals.user._id
-      // check to make sure it's not already loaded
-      const lookup = await Schedule.find({courseId,userId})
-      if (lookup.length==0){
-        const schedule = new Schedule({courseId,userId})
-        await schedule.save()
-      }
-      res.redirect('/schedule/show')
-    } catch(e){
-      next(e)
-    }
-  })
-
-app.get('/schedule/show',
-  // show the current user's schedule
-  async (req,res,next) => {
-    try{
-      const userId = res.locals.user._id;
-      const courseIds = 
-         (await Schedule.find({userId}))
-                        .sort(x => x.term)
-                        .map(x => x.courseId)
-      res.locals.courses = await Course.find({_id:{$in: courseIds}})
-      res.render('schedule')
-    } catch(e){
-      next(e)
-    }
-  }
-)
-
-app.get('/schedule/remove/:courseId',
-  // remove a course from the user's schedule
-  async (req,res,next) => {
-    try {
-      
-
-    } catch(e){
-      next(e)
-    }
-  }
-)
-
-app.get('')
 // here we catch 404 errors and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
